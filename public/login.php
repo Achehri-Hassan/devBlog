@@ -1,3 +1,51 @@
+
+
+
+<?php 
+
+session_start();
+require_once "../src/auth/auth.php";
+
+$handel_error ="";
+   
+   if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["login"])){
+       
+       $email = trim($_POST["email"]);
+       $password =trim($_POST["password"]);
+
+
+       if(!empty($email) && !empty($password)){
+            
+           $auth = new Login_admin();
+           $user = $auth->login($email);
+
+
+           if($user && password_verify($password , $user["password"])){
+               $_SESSION["is_admin"] = $user["userName"];
+               header("Location:admin/dashboard.php");
+               exit();
+           }else {
+             $handel_error ="Email and passord is not correct";
+           }
+           
+       }else{
+         $handel_error ="Please select all input";
+       }
+
+       
+   }
+
+
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,14 +86,16 @@
       <div class="login__content">
         <h1>Welcome Back,<br><span>Admin</span></h1>
         <p class="login__sub">Sign in to your account and continue managing your platform.</p>
-
-        <form class="card" id="loginForm" novalidate>
-
+           <?php if ($handel_error): ?>
+            <p class="error"><?= htmlspecialchars($handel_error) ?></p>
+          <?php endif; ?>
+        <form class="card" id="loginForm" novalidate method="post">
+     
           <div class="field" id="emailField">
             <svg class="field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
             <div class="field__body">
               <label for="email">Email address</label>
-              <input type="email" id="email" name="email" placeholder="admin@yourdomain.com" autocomplete="username" required>
+              <input type="email" id="email" name="email"  autocomplete="username" required>
             </div>
           </div>
 
@@ -74,7 +124,7 @@
             <a href="#" class="forgot">Forget password?</a>
           </div>
 
-          <button type="submit" class="btn btn--primary">
+          <button type="submit" class="btn btn--primary" name="login">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" x2="3" y1="12" y2="12"></line></svg>
             Login
           </button>
@@ -82,9 +132,9 @@
 
         <div class="or"><span>or</span></div>
 
-        <a href="#" class="btn btn--outline">
+        <a href="index.php" class="btn btn--outline">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1z"></path></svg>
-          Register as Admin
+          Visite a site
         </a>
       </div>
 
