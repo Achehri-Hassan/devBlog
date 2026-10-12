@@ -1,82 +1,102 @@
 # DevBlog
 
-DevBlog est un projet de blog développé progressivement pour pratiquer
-le développement web avec HTML, CSS, JavaScript, PHP et MySQL.
+DevBlog is a blog application built progressively to practice web development using HTML, CSS, JavaScript, PHP, and MySQL.
 
-## État actuel du projet
+## Project Overview
 
-La première étape consiste à concevoir les interfaces du site avec HTML
-et CSS.
+The project aims to build a functional blog with a dynamic frontend, a PHP backend, and a MySQL database.
 
-### Interfaces conçues
+The interface uses a clean design, consistent navigation, and orange (`#FF9408`) as the main accent color.
 
--   Page d'accueil (Home)
--   Page de liste des articles
--   Page de détails d'un article
--   Page de connexion (Login)
--   Interface du tableau de bord (Dashboard)
+## Designed Interfaces
 
-Le design utilise une interface claire, une navigation cohérente et la
-couleur orange `#FF9408` comme accent visuel.
+- Home page
+- Articles listing page
+- Article details page
+- Login page
+- Admin dashboard
 
-## Étapes suivantes
+## Implemented Features
 
-1.  Créer la base de données MySQL et les tables nécessaires.
-2.  Configurer la connexion à la base de données avec PHP et PDO.
-3.  Développer les opérations CRUD pour les articles.
-4.  Afficher les articles et leurs détails depuis la base de données.
-5.  Ajouter les commentaires et les relations entre les tables.
-6.  Mettre en place une API REST en PHP.
-7.  Utiliser les méthodes HTTP : `GET`, `POST`, `PUT`, `PATCH` et
-    `DELETE`.
-8.  Connecter le frontend à l'API avec JavaScript et Fetch API.
-9.  Tester les requêtes et les réponses avec Postman.
-10. Ajouter les validations et les protections de sécurité nécessaires.
+- MySQL database connection using PHP and PDO.
+- Database table creation for articles.
+- Insertion of sample articles into the database.
+- Retrieving all articles using the `ReadAll()` function.
+- Retrieving a specific article using the `ReadById()` function.
+- Dynamic display of article titles, descriptions, categories, images, and content.
+- Displaying full article content with HTML paragraphs and headings.
+- Dynamic navigation between article details using article IDs.
 
-## Technologies prévues
+## Technologies Used
 
--   HTML
--   CSS
--   JavaScript
--   PHP
--   MySQL
--   REST API / HTTP
--   Fetch API
--   Postman
+- HTML5
+- CSS3
+- JavaScript
+- PHP
+- MySQL
+- PDO
+- Git and GitHub
 
-> Les fonctionnalités backend, la base de données et l'API REST sont
-> prévues pour les prochaines étapes. Elles ne sont pas encore
-> présentées comme terminées.
+## Project Structure
 
-## Lancer le projet
-
-Si tu utilises XAMPP :
-
-1.  Place le dossier du projet dans `C:\xampp\htdocs\devblog`.
-2.  Démarre Apache depuis le panneau de contrôle XAMPP.
-3.  Ouvre le projet dans ton navigateur, par exemple :
-    `http://localhost/devblog/public/`.
-
-Adapte l'URL si la structure de tes dossiers est différente.
-
-## Git
-
-Pour enregistrer les changements et les envoyer vers le dépôt distant :
-
-``` bash
-git add .
-git commit -m "feat: add DevBlog frontend page designs"
-git push
+```text
+DevBlog/
+├── public/
+│   ├── index.php
+│   ├── article.php
+│   └── assets/
+├── src/
+│   ├── config/
+│   │   └── db.php
+│   └── models/
+│       └── Post.php
+├── README.md
+└── .gitignore
 ```
 
-Si c'est le premier push de la branche `main`, utilise si nécessaire :
+*Note: The structure may vary depending on the current project organization.*
 
-``` bash
-git push -u origin main
+## Getting Started
+
+### Requirements
+
+- PHP
+- MySQL
+- Apache server (XAMPP recommended)
+- Web browser
+
+### Installation
+
+1. Clone or download the repository.
+2. Place the project folder inside the XAMPP `htdocs` directory.
+3. Start Apache and MySQL from the XAMPP Control Panel.
+4. Create a MySQL database named `devBlog`.
+5. Import or create the required database tables.
+6. Configure the database connection in `src/config/db.php`.
+7. Open the following URL in your browser:
+
+```text
+http://localhost/devBlog/public/
 ```
 
-## Objectif
+Make sure the database credentials and project path match your local environment.
 
-Construire progressivement un blog fonctionnel, depuis les interfaces
-frontend jusqu'au backend PHP/MySQL et à une API REST testée avec
-Postman.
+## Future Improvements
+
+- Implement complete CRUD operations for articles.
+- Add article editing and deletion.
+- Implement comments and database relationships.
+- Add administrator authentication and authorization.
+- Develop a REST API using PHP.
+- Work with HTTP methods such as `GET`, `POST`, `PUT`, `PATCH`, and `DELETE`.
+- Connect the frontend to the API using JavaScript and Fetch API.
+- Test API requests using Postman.
+- Improve input validation and application security.
+
+## Project Goal
+
+The goal of DevBlog is to build a complete blog application step by step, from frontend design and database integration to backend development and REST API implementation.
+
+## Author
+
+**Hassan Achehri**
