@@ -1,3 +1,20 @@
+<?php
+
+
+require_once "../src/models/Post.php";
+
+
+$calldArticle = new Articles();
+
+$id_article = $_GET['id_article'] ?? 0;
+
+$ReadById = $calldArticle->ReadById($id_article);
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,45 +49,65 @@
 
     <!-- Article -->
     <main class="article-card">
+      <?php if ($ReadById): ?>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span aria-hidden="true">&gt;</span>
+          <a href="index.html#articles">Articles</a>
+          <span aria-hidden="true">&gt;</span>
+          <span class="breadcrumb__current" aria-current="page">The Future of Artificial Intelligence: Trends to Watch in 2025</span>
+        </nav>
 
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="index.html">Home</a>
-        <span aria-hidden="true">&gt;</span>
-        <a href="index.html#articles">Articles</a>
-        <span aria-hidden="true">&gt;</span>
-        <span class="breadcrumb__current" aria-current="page">The Future of Artificial Intelligence: Trends to Watch in 2025</span>
-      </nav>
+        <div class="article-layout">
 
-      <div class="article-layout">
+          <article class="post">
 
-        <article class="post">
-          <span class="post__category">Technology</span>
-          <h1 class="post__title">The Future of Artificial Intelligence: Trends to Watch in 2025</h1>
+            <span class="post__category">
+              <?= htmlspecialchars($ReadById["category"] ?? '') ?>
+            </span>
 
-          <div class="post__meta">
-            <img class="avatar" src="assets/images/hassa.jpg" alt="">
-            <span class="post__author">By John Doe</span>
-            <span class="dot" aria-hidden="true"></span>
-            <time datetime="2025-05-19">May 19, 2025</time>
-            <span class="dot" aria-hidden="true"></span>
-            <span>5 min read</span>
-          </div>
+            <h1 class="post__title">
+              <?= htmlspecialchars($ReadById["title"] ?? '') ?>
+            </h1>
 
-          <img class="post__image" src="assets/images/articles/article1.jpg" alt="Illustration of a human head profile surrounded by AI icons">
+            <div class="post__meta">
+              <img
+                class="avatar"
+                src="assets/images/hassa.jpg"
+                alt="Author">
 
-          <p>Artificial Intelligence (AI) continues to evolve at a breakneck pace, reshaping industries and redefining the way we live and work. As we move into 2025, several key trends are emerging that will drive innovation and impact across the globe.</p>
+              <span class="post__author">By Hassan</span>
 
-          <h2>1. Smarter Automation</h2>
-          <p>Automation is no longer just about repetitive tasks. In 2025, AI-powered automation will handle complex workflows, decision-making, and even creative processes, allowing businesses to operate more efficiently.</p>
+              <span class="dot" aria-hidden="true"></span>
 
-          <h2>2. Generative AI Goes Mainstream</h2>
-          <p>From content creation to software development, generative AI tools are becoming essential. More organizations will integrate these tools into their daily operations to boost productivity and creativity.</p>
+              <time datetime="<?= htmlspecialchars($ReadById["created_at"] ?? '') ?>">
+                <?= !empty($ReadById["created_at"])
+                  ? date("F d, Y", strtotime($ReadById["created_at"]))
+                  : '' ?>
+              </time>
 
-          <h2>3. AI and Human Collaboration</h2>
-          <p>The future isn’t about AI replacing humans, but about collaboration. AI will augment human capabilities, leading to better outcomes in healthcare, education, and beyond.</p>
+              <span class="dot" aria-hidden="true"></span>
 
-          <p>As AI continues to advance, staying informed and adaptable will be key to thriving in this exciting new era.</p>
-        </article>
+              <span>5 min read</span>
+            </div>
+
+            <img
+              class="post__image"
+              src="assets/images/articles/<?= htmlspecialchars($ReadById["image"] ?? '') ?>"
+              alt="<?= htmlspecialchars($ReadById["title"] ?? '') ?>">
+
+            <p class="post__description">
+              <?= htmlspecialchars($ReadById["description"] ?? '') ?>
+            </p>
+
+            <div class="post__content">
+              <?= $ReadById["content"] ?? '' ?>
+            </div>
+
+          </article>
+        <?php else: ?>
+          <p>Article not found.</p>
+        <?php endif; ?>
 
         <aside class="sidebar">
 
@@ -111,80 +148,87 @@
               </button>
             </div>
           </section>
+          <?php
+          $relatedArticles = $calldArticle->ReadAll();
+          ?>
 
           <section class="side-box related">
             <h2 class="bar-title">Related Articles</h2>
+
             <ul>
-              <li>
-                <a href="article.html" class="related__item">
-                  <img src="assets/images/articles/article2.jpg" alt="">
-                  <span>
-                    <strong>Top 10 Programming Languages to Learn in 2025</strong>
-                    <time datetime="2025-05-17">May 17, 2025</time>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="article.html" class="related__item">
-                  <img src="assets/images/articles/article3.jpg" alt="">
-                  <span>
-                    <strong>How Technology is Changing the Way We Work</strong>
-                    <time datetime="2025-05-15">May 15, 2025</time>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="article.html" class="related__item">
-                  <img src="assets/images/articles/article1.jpg" alt="">
-                  <span>
-                    <strong>Renewable Energy: Building a Greener Tomorrow</strong>
-                    <time datetime="2025-05-12">May 12, 2025</time>
-                  </span>
-                </a>
-              </li>
+              <?php foreach ($relatedArticles as $related): ?>
+
+                <?php if ($related['id_article'] != $ReadById['id_article']): ?>
+
+                  <li>
+                    <a
+                      href="article.php?id_article=<?= (int) $related['id_article'] ?>"
+                      class="related__item">
+                      <img
+                        src="assets/images/articles/<?= htmlspecialchars($related['image'] ?? '') ?>"
+                        alt="<?= htmlspecialchars($related['title']) ?>">
+
+                      <span>
+                        <strong>
+                          <?= htmlspecialchars($related['title']) ?>
+                        </strong>
+
+                        <time datetime="<?= htmlspecialchars($related['created_at'] ?? '') ?>">
+                          <?= !empty($related['created_at'])
+                            ? date('M d, Y', strtotime($related['created_at']))
+                            : '' ?>
+                        </time>
+                      </span>
+                    </a>
+                  </li>
+
+                <?php endif; ?>
+
+              <?php endforeach; ?>
             </ul>
           </section>
 
+
         </aside>
-      </div>
+        </div>
 
-      <!-- Comments -->
-      <section class="comments" aria-labelledby="commentsTitle">
-        <h2 class="bar-title bar-title--lg" id="commentsTitle">Comments (<span id="commentCount">2</span>)</h2>
+        <!-- Comments -->
+        <section class="comments" aria-labelledby="commentsTitle">
+          <h2 class="bar-title bar-title--lg" id="commentsTitle">Comments (<span id="commentCount">2</span>)</h2>
 
-        <ul class="comments__list" id="commentList">
-          <li class="comment">
-            <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
-            <div class="comment__body">
-              <div class="comment__head"><strong>Ahmed Benali</strong><time datetime="2025-05-19T10:30">May 19, 2025 at 10:30 AM</time></div>
-              <p>Very insightful article! AI is shaping our future in incredible ways.</p>
-              <button type="button" class="comment__reply">Reply</button>
+          <ul class="comments__list" id="commentList">
+            <li class="comment">
+              <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
+              <div class="comment__body">
+                <div class="comment__head"><strong>Ahmed Benali</strong><time datetime="2025-05-19T10:30">May 19, 2025 at 10:30 AM</time></div>
+                <p>Very insightful article! AI is shaping our future in incredible ways.</p>
+                <button type="button" class="comment__reply">Reply</button>
+              </div>
+            </li>
+            <li class="comment">
+              <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
+              <div class="comment__body">
+                <div class="comment__head"><strong>Sara El Amrani</strong><time datetime="2025-05-19T11:45">May 19, 2025 at 11:45 AM</time></div>
+                <p>I agree! Generative AI tools are already making a huge difference.</p>
+                <button type="button" class="comment__reply">Reply</button>
+              </div>
+            </li>
+          </ul>
+
+          <form class="comment-form" id="commentForm">
+            <h3>Leave a Comment</h3>
+            <div class="comment-form__fields">
+              <input type="text" id="cName" placeholder="Your Name" aria-label="Your Name" required>
+              <textarea id="cText" placeholder="Your Comment" aria-label="Your Comment" rows="3" required></textarea>
             </div>
-          </li>
-          <li class="comment">
-            <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
-            <div class="comment__body">
-              <div class="comment__head"><strong>Sara El Amrani</strong><time datetime="2025-05-19T11:45">May 19, 2025 at 11:45 AM</time></div>
-              <p>I agree! Generative AI tools are already making a huge difference.</p>
-              <button type="button" class="comment__reply">Reply</button>
-            </div>
-          </li>
-        </ul>
-
-        <form class="comment-form" id="commentForm">
-          <h3>Leave a Comment</h3>
-          <div class="comment-form__fields">
-            <input type="text" id="cName" placeholder="Your Name" aria-label="Your Name" required>
-            <textarea id="cText" placeholder="Your Comment" aria-label="Your Comment" rows="3" required></textarea>
-          </div>
-          <button type="submit" class="btn-orange">Post Comment</button>
-        </form>
-      </section>
+            <button type="submit" class="btn-orange">Post Comment</button>
+          </form>
+        </section>
 
     </main>
 
     <!-- Newsletter -->
-  <section class="newsletter" aria-labelledby="nlTitle">
+    <section class="newsletter" aria-labelledby="nlTitle">
       <div class="newsletter__icon" aria-hidden="true">
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="4" width="20" height="16" rx="3"></rect>
@@ -199,7 +243,7 @@
         <input type="email" placeholder="Enter your email" aria-label="Enter your email" required>
         <button type="submit">Subscribe</button>
       </form>
-  </section>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -215,7 +259,7 @@
 
   </div>
 
- 
+
 </body>
 
 </html>

@@ -1,3 +1,13 @@
+<?php
+
+   session_start();
+   
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,7 +87,7 @@
         <img class="banner__img" src="../assets/images/hero.jpg" alt="">
         <div class="banner__text">
           <p>Welcome back,</p>
-          <h1>Hassan!</h1>
+          <h1><?= $_SESSION["is_admin"] ?></h1>
           <span>Here's what's happening with your platform today.</span>
         </div>
       </section>

@@ -1,5 +1,20 @@
+<?php
+
+require_once "../src/models/Post.php";
+
+$callArticle = new Articles();
+$articleRead = $callArticle->ReadAll();
+
+
+
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
   <section class="hero">
 
@@ -24,7 +40,7 @@
     </div>
 
     <!-- Navigation -->
-   <?php require_once __DIR__ . '/include/header.php'; ?>
+    <?php require_once __DIR__ . '/include/header.php'; ?>
 
     <!-- Hero content -->
     <div class="hero__content">
@@ -51,46 +67,30 @@
         <a href="#" class="articles__all">View all Articles</a>
       </div>
 
+
       <div class="articles__grid">
-        <article class="card">
-          <a href="#" class="card__media" tabindex="-1" aria-hidden="true">
-            <img src="assets/images/articles/article1.jpg" alt="" loading="lazy">
-          </a>
-          <div class="card__body">
-            <span class="card__category">Technology</span>
-            <h3 class="card__title"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam neque quibusdam sint asperiores!</a></h3>
-            <time class="card__date" datetime="2025-05-19">19 May 2025</time>
-            <a href="#" class="card__link">Read More <svg class="arrow" width="28" height="12" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="1" y1="6" x2="26" y2="6"></line><polyline points="21 1 26.5 6 21 11"></polyline></svg></a>
-          </div>
-        </article>
+        <?php foreach ($articleRead as $re): ?>
+          <article class="card">
+            <a href="article.php?id_article=<?= $re['id_article'] ?>" class="card__media" tabindex="-1" aria-hidden="true">
+              <img src="assets/images/articles/<?= htmlspecialchars($re["image"]) ?>" alt="" loading="lazy">
+            </a>
+            <div class="card__body">
+              <span class="card__category"><?= htmlspecialchars($re["category"]) ?></span>
+              <h3 class="card__title"><a href="#"><?= htmlspecialchars($re["description"]) ?></a></h3>
+              <time class="card__date" datetime="2025-05-19"><?= date("d m ", strtotime($re["created_at"])) ?></time>
+              <a href="article.php?id_article=<?= $re['id_article'] ?>" class="card__link">
+                Read More
+              </a>
+            </div>
+          </article>
+        <?php endforeach; ?>
 
-        <article class="card">
-          <a href="#" class="card__media" tabindex="-1" aria-hidden="true">
-            <img src="assets/images/articles/article2.jpg" alt="" loading="lazy">
-          </a>
-          <div class="card__body">
-            <span class="card__category">Technology</span>
-            <h3 class="card__title"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam neque quibusdam sint asperiores!</a></h3>
-            <time class="card__date" datetime="2025-05-19">19 May 2025</time>
-            <a href="#" class="card__link">Read More <svg class="arrow" width="28" height="12" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="1" y1="6" x2="26" y2="6"></line><polyline points="21 1 26.5 6 21 11"></polyline></svg></a>
-          </div>
-        </article>
 
-        <article class="card">
-          <a href="#" class="card__media" tabindex="-1" aria-hidden="true">
-            <img src="assets/images/articles/article3.jpg" alt="" loading="lazy">
-          </a>
-          <div class="card__body">
-            <span class="card__category">Technology</span>
-            <h3 class="card__title"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam neque quibusdam sint asperiores!</a></h3>
-            <time class="card__date" datetime="2025-05-19">19 May 2025</time>
-            <a href="#" class="card__link">Read More <svg class="arrow" width="28" height="12" viewBox="0 0 28 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="1" y1="6" x2="26" y2="6"></line><polyline points="21 1 26.5 6 21 11"></polyline></svg></a>
-          </div>
-        </article>
 
       </div>
     </div>
   </section>
-  
+
 </body>
+
 </html>
