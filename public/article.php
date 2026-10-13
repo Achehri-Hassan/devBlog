@@ -2,13 +2,47 @@
 
 
 require_once "../src/models/Post.php";
+require_once "../src/models/Comment.php";
 
 
 $calldArticle = new Articles();
+$callComment = new Comments();
 
 $id_article = $_GET['id_article'] ?? 0;
 
 $ReadById = $calldArticle->ReadById($id_article);
+
+$error = '';
+$success = '';
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["send_comment"])) {
+  
+    $username = trim($_POST["username"] ?? '');
+    $commentText = trim($_POST["comment"] ?? '');
+
+    if (!$ReadById) {
+        $error = "Article not found.";
+    } elseif ($username !== '' && $commentText !== '') {
+        $saved = $callComment->CreatComments(
+            $username,
+            $commentText,
+            (int) $id_article,
+            null
+        );
+
+        if ($saved) {
+            header("Location: article.php?id_article=" . (int) $id_article . "#commentsTitle");
+            exit();
+        }
+
+        $error = "Could not save your comment. Please try again.";
+    } else {
+        $error = "Please enter your name and comment.";
+    }
+}
+
+$comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
+
 
 ?>
 
@@ -93,8 +127,17 @@ $ReadById = $calldArticle->ReadById($id_article);
 
             <img
               class="post__image"
-              src="assets/images/articles/<?= htmlspecialchars($ReadById["image"] ?? '') ?>"
-              alt="<?= htmlspecialchars($ReadById["title"] ?? '') ?>">
+              src="<?= htmlspecialchars(
+                !empty($ReadById["image"])
+                  ? (preg_match('~^(https?://|/)~i', $ReadById["image"])
+                      ? $ReadById["image"]
+                      : 'assets/images/articles/' . ltrim($ReadById["image"], '/'))
+                  : 'assets/images/hassa.jpg',
+                ENT_QUOTES,
+                'UTF-8'
+              ) ?>"
+              alt="<?= htmlspecialchars($ReadById["title"] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+              onerror="this.onerror=null;this.src='assets/images/hassa.jpg';">
 
             <p class="post__description">
               <?= htmlspecialchars($ReadById["description"] ?? '') ?>
@@ -194,34 +237,56 @@ $ReadById = $calldArticle->ReadById($id_article);
 
         <!-- Comments -->
         <section class="comments" aria-labelledby="commentsTitle">
-          <h2 class="bar-title bar-title--lg" id="commentsTitle">Comments (<span id="commentCount">2</span>)</h2>
+          <h2 class="bar-title bar-title--lg" id="commentsTitle">
+            Comments (<?= count($comments) ?>)
+          </h2>
+
+          <?php if ($error !== ''): ?>
+            <p class="comment-message comment-message--error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
+          <?php endif; ?>
 
           <ul class="comments__list" id="commentList">
-            <li class="comment">
-              <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
-              <div class="comment__body">
-                <div class="comment__head"><strong>Ahmed Benali</strong><time datetime="2025-05-19T10:30">May 19, 2025 at 10:30 AM</time></div>
-                <p>Very insightful article! AI is shaping our future in incredible ways.</p>
-                <button type="button" class="comment__reply">Reply</button>
-              </div>
-            </li>
-            <li class="comment">
-              <img class="avatar avatar--lg" src="assets/images/hassa.jpg" alt="">
-              <div class="comment__body">
-                <div class="comment__head"><strong>Sara El Amrani</strong><time datetime="2025-05-19T11:45">May 19, 2025 at 11:45 AM</time></div>
-                <p>I agree! Generative AI tools are already making a huge difference.</p>
-                <button type="button" class="comment__reply">Reply</button>
-              </div>
-            </li>
+            <?php if (empty($comments)): ?>
+              <li class="comment-empty">No comments yet. Be the first to comment!</li>
+            <?php else: ?>
+              <?php foreach ($comments as $item): ?>
+                <li class="comment">
+                  <?php
+                    $commentImage = !empty($item['image'])
+                      ? $item['image']
+                      : 'assets/images/hassa.jpg';
+                    if (!preg_match('~^(https?://|/)~i', $commentImage)) {
+                      $commentImage = 'assets/images/' . ltrim($commentImage, '/');
+                    }
+                  ?>
+                  <img class="avatar avatar--lg"
+                       src="<?= htmlspecialchars($commentImage, ENT_QUOTES, 'UTF-8') ?>"
+                       alt=""
+                       onerror="this.onerror=null;this.src='assets/images/hassa.jpg';">
+                  <div class="comment__body">
+                    <div class="comment__head">
+                      <strong><?= htmlspecialchars($item['user_name'] ?? 'Anonymous', ENT_QUOTES, 'UTF-8') ?></strong>
+                      <time datetime="<?= htmlspecialchars($item['created_at'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                        <?= !empty($item['created_at']) ? date('M d, Y \\a\\t h:i A', strtotime($item['created_at'])) : '' ?>
+                      </time>
+                    </div>
+                    <p><?= nl2br(htmlspecialchars($item['content'] ?? '', ENT_QUOTES, 'UTF-8')) ?></p>
+                  </div>
+                </li>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </ul>
 
-          <form class="comment-form" id="commentForm">
+          <form class="comment-form" id="commentForm" method="POST"
+                action="article.php?id_article=<?= (int) $id_article ?>#commentsTitle">
             <h3>Leave a Comment</h3>
             <div class="comment-form__fields">
-              <input type="text" id="cName" placeholder="Your Name" aria-label="Your Name" required>
-              <textarea id="cText" placeholder="Your Comment" aria-label="Your Comment" rows="3" required></textarea>
+              <input type="text" id="cName" name="username" placeholder="Your Name"
+                     aria-label="Your Name" maxlength="100" required>
+              <textarea id="cText" name="comment" placeholder="Your Comment"
+                        aria-label="Your Comment" rows="3" maxlength="5000" required></textarea>
             </div>
-            <button type="submit" class="btn-orange">Post Comment</button>
+            <button type="submit" class="btn-orange" name="send_comment" value="1">Post Comment</button>
           </form>
         </section>
 
