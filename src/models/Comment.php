@@ -40,4 +40,17 @@ class Comments
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
+    
+  public function DeleteComments($id_article)
+  {
+    $sql = "DELETE FROM comments WHERE article_id = :id_article";
+    $stmt = $this->conn->prepare($sql);
+
+    return $stmt->execute([
+      "id_article" => $id_article
+    ]);
+  }
+
 }

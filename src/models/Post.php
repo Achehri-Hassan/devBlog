@@ -1,7 +1,6 @@
-
 <?php
 
-require_once "../src/config/db.php";
+require_once __DIR__ . "/../config/db.php";
 
 class Articles
 {
@@ -39,7 +38,7 @@ class Articles
     $sql = "INSERT INTO articles
                 (title, description, content ,image, admin_id, category)
                 VALUES
-                (:title, :description, content ,:image, :admin_id, :category)";
+                (:title, :description, :content ,:image, :admin_id, :category)";
 
     $stmt = $this->conn->prepare($sql);
 
@@ -73,23 +72,15 @@ class Articles
   }
 
 
+ 
+
   public function DeleteArticle($id_article)
   {
     $sql = "DELETE FROM articles WHERE id_article = :id_article";
-
     $stmt = $this->conn->prepare($sql);
 
-    $stmt->execute([
+    return $stmt->execute([
       "id_article" => $id_article
     ]);
-
-    return $stmt->rowCount() > 0;
   }
 }
-
-
-
-
-
-
-?>

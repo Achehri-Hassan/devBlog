@@ -1,8 +1,19 @@
 <?php
 
-   session_start();
-   
+session_start();
+if (!isset($_SESSION["is_admin"])) {
+  header("Location: ../login.php");
+  exit;
+}
 
+require_once __DIR__ . "/../../src/models/Post.php";
+
+if (empty($_SESSION["csrf"])) {
+  $_SESSION["csrf"] = bin2hex(random_bytes(32));
+}
+
+$articleObj = new Articles();
+$recentArticles = array_slice($articleObj->ReadAll(), 0, 5);
 
 ?>
 
@@ -157,7 +168,7 @@
 
           <h3 class="quick__title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" fill="currentColor"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> Quick Actions</h3>
           <div class="quick">
-          <a href="#" class="action"><span class="action__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><line x1="9" x2="15" y1="15" y2="15"/></svg></span><span class="action__label">Add Article</span><span class="action__arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
+          <a href="create-post.php" class="action"><span class="action__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><line x1="9" x2="15" y1="15" y2="15"/></svg></span><span class="action__label">Add Article</span><span class="action__arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
           <a href="#" class="action"><span class="action__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="action__label">Manage Users</span><span class="action__arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
           <a href="#" class="action"><span class="action__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg></span><span class="action__label">View Analytics</span><span class="action__arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
           <a href="#" class="action"><span class="action__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="action__label">Settings</span><span class="action__arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a>
@@ -169,35 +180,41 @@
             <h2 class="bar-title">Recent Articles</h2>
             <a href="index.html#articles" class="view-all">View all</a>
           </div>
+          <?php if (!empty($_SESSION["flash_error"])): ?>
+            <p style="background:#fee2e2;color:#991b1b;padding:10px 14px;border-radius:10px"><?= htmlspecialchars($_SESSION["flash_error"]) ?></p>
+            <?php unset($_SESSION["flash_error"]); ?>
+          <?php endif; ?>
+          <?php if (isset($_GET["deleted"])): ?>
+            <p style="background:#dcfce7;color:#166534;padding:10px 14px;border-radius:10px">Article and its comments deleted.</p>
+          <?php elseif (isset($_GET["updated"])): ?>
+            <p style="background:#dcfce7;color:#166534;padding:10px 14px;border-radius:10px">Article updated.</p>
+          <?php elseif (isset($_GET["success"])): ?>
+            <p style="background:#dcfce7;color:#166534;padding:10px 14px;border-radius:10px">Article published.</p>
+          <?php endif; ?>
           <ul>
+          <?php foreach ($recentArticles as $a): ?>
           <li class="recent__item">
-            <img src="../assets/images/articles/article3.jpg" alt="" loading="lazy">
+            <?php if (!empty($a["image"])): ?>
+              <img src="../assets/images/articles/<?= htmlspecialchars(basename($a["image"])) ?>" alt="" loading="lazy">
+            <?php endif; ?>
             <div class="recent__text">
-              <a href="article.html">Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
-              <time>19 May 2025</time>
+              <a href="../article.php?id=<?= (int)$a["id_article"] ?>"><?= htmlspecialchars($a["title"]) ?></a>
+              <?php if (!empty($a["created_at"])): ?>
+                <time><?= htmlspecialchars(date("d M Y", strtotime($a["created_at"]))) ?></time>
+              <?php endif; ?>
             </div>
-            <span class="tag">Technology</span>
-            <button class="kebab" type="button" aria-label="More options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
+            <span class="tag"><?= htmlspecialchars($a["category"]) ?></span>
+            <a href="edite-post.php?id=<?= (int)$a["id_article"] ?>" class="tag">Edit</a>
+            <form method="post" action="delete.php" style="display:inline;margin:0" onsubmit="return confirm('Do you want to delete this article and all its comments?');">
+              <input type="hidden" name="id_article" value="<?= (int)$a["id_article"] ?>">
+              <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION["csrf"]) ?>">
+              <button type="submit" class="tag" style="background:#fee2e2;color:#991b1b;border:0;cursor:pointer;font:inherit">Delete</button>
+            </form>
           </li>
-          <li class="recent__item">
-            <img src="../assets/images/articles/article2.jpg" alt="" loading="lazy">
-            <div class="recent__text">
-              <a href="article.html">Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
-              <time>18 May 2025</time>
-            </div>
-            <span class="tag">Business</span>
-            <button class="kebab" type="button" aria-label="More options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
-          </li>
-          <li class="recent__item">
-            <img src="../assets/images/articles/article1.jpg" alt="" loading="lazy">
-            <div class="recent__text">
-              <a href="article.html">Lorem ipsum dolor sit amet consectetur adipisicing elit.</a>
-              <time>17 May 2025</time>
-            </div>
-            <span class="tag">Design</span>
-            <button class="kebab" type="button" aria-label="More options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
-          </li>
-         
+          <?php endforeach; ?>
+          <?php if (empty($recentArticles)): ?>
+            <li class="recent__item"><div class="recent__text">No articles yet.</div></li>
+          <?php endif; ?>
           </ul>
         </section>
       </div>
