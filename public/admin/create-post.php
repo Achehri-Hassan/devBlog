@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   $title       = trim($_POST["title"] ?? "");
   $description = trim($_POST["description"] ?? "");
-  $content     = trim($_POST["content"] ?? "");
+  $content     = trim(strip_tags($_POST["content"] ?? "", '<h2><h3><p><br><strong><em><b><i><ul><ol><li><a><blockquote>'));
   $category    = trim($_POST["category"] ?? "");
   $admin_id    = $_SESSION["admin_id"] ?? 1; 
 
@@ -272,6 +272,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <!-- Content -->
             <div class="field">
               <label for="content">Content <b class="req">*</b></label>
+              <div class="editor-toolbar" style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+                <button type="button" class="btn btn--ghost" data-tag="h2">H2</button>
+                <button type="button" class="btn btn--ghost" data-tag="p">P</button>
+                <button type="button" class="btn btn--ghost" id="autoFormat" title="Lines starting with '# ' become H2, other lines become P">Lines &rarr; HTML</button>
+              </div>
               <div class="input input--area">
                 <textarea id="content" name="content" rows="12" placeholder="Write your article content here..." required><?= htmlspecialchars($content) ?></textarea>
               </div>
@@ -367,6 +372,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <span class="blob" aria-hidden="true"></span>
   </div>
+ 
+  <script src="../../public/assets/js/app.js"></script>
 </body>
 
 </html>

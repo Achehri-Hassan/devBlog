@@ -144,7 +144,11 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
             </p>
 
             <div class="post__content">
-              <?= $ReadById["content"] ?? '' ?>
+              <?php
+              // Decode content that was saved escaped (&lt;p&gt;), then allow only safe tags
+              $postContent = html_entity_decode($ReadById["content"] ?? '', ENT_QUOTES, 'UTF-8');
+              echo strip_tags($postContent, '<h2><h3><p><br><strong><em><b><i><ul><ol><li><a><blockquote>');
+              ?>
             </div>
 
           </article>
@@ -201,7 +205,7 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
             <ul>
               <?php foreach ($relatedArticles as $related): ?>
 
-                <?php if ($related['id_article'] != $ReadById['id_article']): ?>
+                <?php if (!$ReadById || $related['id_article'] != $ReadById['id_article']): ?>
 
                   <li>
                     <a

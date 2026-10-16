@@ -98,11 +98,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $result = $articleObj->UpdateArticle($id, $title, $description, $content, $imageName, $category);
 
         if ($result) {
-            
+
             if ($newImage !== "" && $currentImage !== "") {
                 @unlink($uploadDir . basename($currentImage));
             }
-            header("Location: dashboard.php?updated=1");
+            header("Location: dashboard.php");
             exit;
         } else {
             $errors["general"] = "Failed to update the article. Please try again.";
@@ -276,9 +276,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </div>
                         </div>
 
+
                         <!-- Content -->
                         <div class="field">
                             <label for="content">Content <b class="req">*</b></label>
+                            <div class="editor-toolbar" style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+                                <button type="button" class="btn btn--ghost" data-tag="h2">H2</button>
+                                <button type="button" class="btn btn--ghost" data-tag="p">P</button>
+                                <button type="button" class="btn btn--ghost" id="autoFormat" title="Lines starting with '# ' become H2, other lines become P">Lines &rarr; HTML</button>
+                            </div>
                             <div class="input input--area">
                                 <textarea id="content" name="content" rows="12" placeholder="Write your article content here..." required><?= htmlspecialchars($content) ?></textarea>
                             </div>
@@ -378,6 +384,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <span class="blob" aria-hidden="true"></span>
     </div>
+
+    <script src="../../public/assets/js/app.js"></script>
 </body>
 
 </html>
