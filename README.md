@@ -1,116 +1,74 @@
 # DevBlog
 
-DevBlog is a simple blog application built from scratch using HTML, CSS, JavaScript, PHP, and MySQL, without using any frameworks.
+DevBlog is a dynamic blog application and REST API built completely from scratch using native PHP, MySQL (PDO), JavaScript, HTML, and CSS, without relying on any external frameworks.
 
-The project allows visitors to browse articles and read their details. It also includes an admin system for managing articles.
+The project features a full public browsing interface, a secure administrator dashboard, and a complete REST API for article management.
 
 ## Features
 
-- Home page
-- Display all articles
-- View article details
-- Dynamic article content retrieved from MySQL
-- Article images and categories
-- PHP and MySQL database connection using PDO
-- Article CRUD operations:
-  - Create articles
-  - Read articles
-  - Update articles
-  - Delete articles
-- Responsive user interface
-- Orange theme: `#FF9408`
+- **Public Pages**: Browse home, view all articles, read specific article details, and interact with user layouts.
+- **Admin Dashboard**: Secure login system (`admin/`), and complete management interfaces (`create-post.php`, `edite-post.php`, `delete.php`).
+- **REST API (Articles)**: Full CRUD operations built with native PHP and PDO:
+  - `GET /api/articles/` (Fetch all articles in JSON)
+  - `GET /api/articles/show.php?id={id}` (Fetch a single article)
+  - `POST /api/articles/create.php` (Create a new article)
+  - `PUT /api/articles/update.php` (Update an existing article)
+  - `DELETE /api/articles/delete.php` (Delete an article)
+- **Visual Design**: Clean orange visual theme (`#FF9408`), responsive layouts, and custom CSS styling.
 
 ## Technologies
 
-- HTML5
-- CSS3
-- JavaScript
-- PHP
-- MySQL
-- PDO
-- Git and GitHub
+- **Backend**: Native PHP, PDO
+- **Database**: MySQL
+- **Frontend**: HTML5, CSS3, JavaScript (Fetch API / App scripts)
+- **Tools**: XAMPP, Postman (for API testing), Git & GitHub
 
 ## Project Structure
 
 ```text
 DevBlog/
+├── api/
+│   └── articles/
+│       ├── create.php
+│       ├── delete.php
+│       ├── index.php
+│       ├── show.php
+│       └── update.php
+├── database/
+│   └── schema.sql
 ├── public/
 │   ├── index.php
-│   ├── articles.php
 │   ├── article.php
-│   └── assets/
-│       ├── css/
-│       │   ├── style.css
-│       │   ├── articles.css
-│       │   └── article-details.css
-│       └── js/
-│           └── app.js
+│   ├── login.php
+│   ├── logout.php
+│   ├── admin/
+│   │   ├── dashboard.php
+│   │   ├── create-post.php
+│   │   ├── edite-post.php
+│   │   └── delete.php
+│   ├── assets/
+│   │   ├── css/
+│   │   ├── images/
+│   │   └── js/
+│   └── include/
+│       ├── header.php
+│       └── footer.php
 ├── src/
+│   ├── auth/
+│   │   └── auth.php
 │   ├── config/
 │   │   └── db.php
-│   └── models/
-│       └── Post.php
-├── README.md
-└── .gitignore
-```
-
-## Database
-
-The project uses a MySQL database named `devBlog`.
-
-### Articles Table
-
-The `articles` table contains the following fields:
-
-- `id_article`: Unique article ID
-- `title`: Article title
-- `description`: Article content
-- `image`: Article image path
-- `admin_id`: ID of the administrator who created the article
-- `category`: Article category
-- `created_at`: Creation date
-- `updated_at`: Last update date
-
-## Installation
-
-1. Clone or download this repository.
-2. Place the project inside your XAMPP `htdocs` directory.
-3. Start Apache and MySQL from the XAMPP Control Panel.
-4. Create the `devBlog` database in phpMyAdmin.
-5. Create the required tables and insert your sample data.
-6. Configure your database connection in `src/config/db.php`.
-7. Open the application in your browser:
-
-   `http://localhost/DevBlog/public/`
-
-## Current Progress
-
-The frontend pages have been created, and the PHP/MySQL integration allows articles to be retrieved and displayed dynamically.
-
-The article CRUD operations have been implemented.
-
-## Next Steps
-
-- Complete and improve the comments feature.
-- Implement administrator authentication and protect the dashboard.
-- Build a REST API for articles and comments.
-- Test API endpoints using Postman.
-- Use HTTP methods such as GET, POST, PUT, PATCH, and DELETE.
-- Connect the API to JavaScript using Fetch API.
-- Improve validation and application security.
-
-## Security
-
-Security improvements include:
-
-- Using PDO prepared statements for database queries.
-- Using `password_hash()` and `password_verify()` for passwords.
-- Using `htmlspecialchars()` to help prevent XSS.
-- Validating user input on the server.
-- Protecting administrator pages with sessions.
-
-## Author
-
-**Hassan Achehri**
-
-Full-Stack Web Development Learner
+│   ├── helpers/
+│   │   └── response.php
+│   ├── models/
+│   │   ├── Comment.php
+│   │   ├── Post.php
+│   │   └── User.php
+│   └── validation/
+│       └── post-validation.php
+├── storage/
+│   └── uploads/
+├── tests/
+│   └── postman-tests.md
+├── .gitignore
+└── README.md
