@@ -63,50 +63,7 @@ a {
   display: block;
 }
 
-/* ---------- Navbar ---------- */
-.navbar {
-  position: relative;
-  z-index: 3;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  height: 64px;
-  margin: 34px clamp(24px, 8.5vw, 150px) 0;
-  padding: 0 26px;
-  background: var(--brown-nav);
-  border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
 
-.navbar__logo {
-  font-size: 1.3rem;
-  font-weight: 700;
-  justify-self: start;
-}
-
-.navbar__links {
-  display: flex;
-  gap: 32px;
-  margin-left: clamp(0px, 14vw, 230px);
-}
-
-.navbar__links a {
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 4px 0;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.2s;
-}
-
-.navbar__links a.is-active,
-.navbar__links a:hover {
-  border-bottom-color: var(--orange);
-}
-
-.navbar__login {
-  justify-self: end;
-  font-weight: 600;
-}
 
 /* ---------- Hero content ---------- */
 .hero__content {
@@ -491,5 +448,41 @@ a {
   }
   .card:hover .card__media img {
     transform: none;
+  }
+}
+
+
+
+/* Small phones */
+@media (max-width: 380px) {
+  .hero__content h1 {
+    font-size: 2.1rem;
+  }
+  .hero__content p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablet: keep the title clear of the circle */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .hero__content {
+    margin-top: 48px;
+  }
+  .hero__content h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+  }
+  .search {
+    max-width: 340px;
+  }
+}
+
+/* Short landscape screens (phones turned sideways) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 40px;
+  }
+  .hero__content {
+    margin-top: 28px;
   }
 }

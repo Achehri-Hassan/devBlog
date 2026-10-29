@@ -1,0 +1,212 @@
+/* ---------- Navbar ---------- */
+.navbar {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 64px;
+  margin: 34px clamp(24px, 8.5vw, 150px) 0;
+  padding: 0 26px;
+  background: var(--brown-nav);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.navbar__logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  justify-self: start;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 32px;
+  margin-left: clamp(0px, 14vw, 230px);
+}
+
+.navbar__links a {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.navbar__links a.is-active,
+.navbar__links a:hover {
+  border-bottom-color: var(--orange);
+}
+
+.navbar__login {
+  justify-self: end;
+  font-weight: 600;
+}
+
+.navbar,
+.article-page .navbar {
+  z-index: 20;
+}
+
+/* Hamburger button: hidden on desktop */
+.navbar__toggle {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar__toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navbar__toggle:focus-visible,
+.navbar__logo:focus-visible,
+.navbar__login:focus-visible,
+.navbar__links a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.navbar__bar {
+  position: absolute;
+  left: 11px;
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform 0.3s ease,
+    opacity 0.2s ease,
+    top 0.3s ease;
+}
+
+.navbar__bar:nth-child(1) {
+  top: 14px;
+}
+.navbar__bar:nth-child(2) {
+  top: 21px;
+}
+.navbar__bar:nth-child(3) {
+  top: 28px;
+}
+
+/* Hamburger -> X */
+.navbar.is-open .navbar__bar:nth-child(1) {
+  top: 21px;
+  transform: rotate(45deg);
+}
+.navbar.is-open .navbar__bar:nth-child(2) {
+  opacity: 0;
+}
+.navbar.is-open .navbar__bar:nth-child(3) {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+/* Active link colour (wins over ".article-page .navbar a") */
+.navbar__links a.is-active {
+  color: var(--orange);
+}
+
+/* ---------- Tablet & mobile ---------- */
+@media (max-width: 900px) {
+  .navbar,
+  .article-page .navbar {
+    grid-template-columns: 1fr auto auto;
+    column-gap: 8px;
+    height: 64px;
+    margin: 20px clamp(16px, 4vw, 40px) 0;
+    padding: 0 12px 0 20px;
+  }
+
+  .navbar__toggle {
+    display: block;
+  }
+
+  /* Dropdown panel */
+  .navbar__links,
+  .article-page .navbar__links {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 0;
+    padding: 8px;
+    background: var(--brown-nav);
+    border-radius: 8px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      visibility 0s linear 0.25s;
+  }
+
+  .navbar.is-open .navbar__links {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  .navbar__links a {
+    padding: 14px 16px;
+    border-bottom: 0;
+    border-left: 3px solid transparent;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .navbar__links a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-bottom-color: transparent;
+  }
+
+  .navbar__links a.is-active {
+    border-left-color: var(--orange);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* ---------- Small phones ---------- */
+@media (max-width: 700px) {
+  /* index page: the hero is a flex column, so keep the navbar full-width */
+  .hero .navbar {
+    margin: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .navbar,
+  .article-page .navbar {
+    height: 56px;
+    padding: 0 8px 0 16px;
+  }
+
+  .navbar__logo {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar__bar,
+  .navbar__links {
+    transition: none !important;
+  }
+}
