@@ -16,29 +16,29 @@ $error = '';
 $success = '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["send_comment"])) {
-  
-    $username = trim($_POST["username"] ?? '');
-    $commentText = trim($_POST["comment"] ?? '');
 
-    if (!$ReadById) {
-        $error = "Article not found.";
-    } elseif ($username !== '' && $commentText !== '') {
-        $saved = $callComment->CreatComments(
-            $username,
-            $commentText,
-            (int) $id_article,
-            null
-        );
+  $username = trim($_POST["username"] ?? '');
+  $commentText = trim($_POST["comment"] ?? '');
 
-        if ($saved) {
-            header("Location: article.php?id_article=" . (int) $id_article . "#commentsTitle");
-            exit();
-        }
+  if (!$ReadById) {
+    $error = "Article not found.";
+  } elseif ($username !== '' && $commentText !== '') {
+    $saved = $callComment->CreatComments(
+      $username,
+      $commentText,
+      (int) $id_article,
+      null
+    );
 
-        $error = "Could not save your comment. Please try again.";
-    } else {
-        $error = "Please enter your name and comment.";
+    if ($saved) {
+      header("Location: article.php?id_article=" . (int) $id_article . "#commentsTitle");
+      exit();
     }
+
+    $error = "Could not save your comment. Please try again.";
+  } else {
+    $error = "Please enter your name and comment.";
+  }
 }
 
 $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
@@ -128,14 +128,14 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
             <img
               class="post__image"
               src="<?= htmlspecialchars(
-                !empty($ReadById["image"])
-                  ? (preg_match('~^(https?://|/)~i', $ReadById["image"])
-                      ? $ReadById["image"]
-                      : 'assets/images/articles/' . ltrim($ReadById["image"], '/'))
-                  : 'assets/images/hassa.jpg',
-                ENT_QUOTES,
-                'UTF-8'
-              ) ?>"
+                      !empty($ReadById["image"])
+                        ? (preg_match('~^(https?://|/)~i', $ReadById["image"])
+                          ? $ReadById["image"]
+                          : 'assets/images/articles/' . ltrim($ReadById["image"], '/'))
+                        : 'assets/images/hassa.jpg',
+                      ENT_QUOTES,
+                      'UTF-8'
+                    ) ?>"
               alt="<?= htmlspecialchars($ReadById["title"] ?? '', ENT_QUOTES, 'UTF-8') ?>"
               onerror="this.onerror=null;this.src='assets/images/hassa.jpg';">
 
@@ -256,17 +256,17 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
               <?php foreach ($comments as $item): ?>
                 <li class="comment">
                   <?php
-                    $commentImage = !empty($item['image'])
-                      ? $item['image']
-                      : 'assets/images/hassa.jpg';
-                    if (!preg_match('~^(https?://|/)~i', $commentImage)) {
-                      $commentImage = 'assets/images/' . ltrim($commentImage, '/');
-                    }
+                  $commentImage = !empty($item['image'])
+                    ? $item['image']
+                    : 'assets/images/hassa.jpg';
+                  if (!preg_match('~^(https?://|/)~i', $commentImage)) {
+                    $commentImage = 'assets/images/' . ltrim($commentImage, '/');
+                  }
                   ?>
                   <img class="avatar avatar--lg"
-                       src="<?= htmlspecialchars($commentImage, ENT_QUOTES, 'UTF-8') ?>"
-                       alt=""
-                       onerror="this.onerror=null;this.src='assets/images/hassa.jpg';">
+                    src="<?= htmlspecialchars($commentImage, ENT_QUOTES, 'UTF-8') ?>"
+                    alt=""
+                    onerror="this.onerror=null;this.src='assets/images/hassa.jpg';">
                   <div class="comment__body">
                     <div class="comment__head">
                       <strong><?= htmlspecialchars($item['user_name'] ?? 'Anonymous', ENT_QUOTES, 'UTF-8') ?></strong>
@@ -282,13 +282,13 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
           </ul>
 
           <form class="comment-form" id="commentForm" method="POST"
-                action="article.php?id_article=<?= (int) $id_article ?>#commentsTitle">
+            action="article.php?id_article=<?= (int) $id_article ?>#commentsTitle">
             <h3>Leave a Comment</h3>
             <div class="comment-form__fields">
               <input type="text" id="cName" name="username" placeholder="Your Name"
-                     aria-label="Your Name" maxlength="100" required>
+                aria-label="Your Name" maxlength="100" required>
               <textarea id="cText" name="comment" placeholder="Your Comment"
-                        aria-label="Your Comment" rows="3" maxlength="5000" required></textarea>
+                aria-label="Your Comment" rows="3" maxlength="5000" required></textarea>
             </div>
             <button type="submit" class="btn-orange" name="send_comment" value="1">Post Comment</button>
           </form>
@@ -296,35 +296,9 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
 
     </main>
 
-    <!-- Newsletter -->
-    <section class="newsletter" aria-labelledby="nlTitle">
-      <div class="newsletter__icon" aria-hidden="true">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="3"></rect>
-          <polyline points="2 7 12 14 22 7"></polyline>
-        </svg>
-      </div>
-      <div class="newsletter__text">
-        <h2 id="nlTitle">Stay Updated</h2>
-        <p>Subscribe to our newsletter and never miss an update.</p>
-      </div>
-      <form class="newsletter__form" onsubmit="return false">
-        <input type="email" placeholder="Enter your email" aria-label="Enter your email" required>
-        <button type="submit">Subscribe</button>
-      </form>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <a href="index.html" class="footer__logo">News</a>
-      <nav class="footer__links" aria-label="Footer">
-        <a href="index.html">Home</a>
-        <a href="index.html#articles">Articles</a>
-        <a href="#">Dashboard</a>
-        <a href="#">Login</a>
-      </nav>
-      <p>© 2025 News. All rights reserved.</p>
-    </footer>
+    
+    <!-- call footer -->
+     <?php  include_once "include/footer.php" ?>
 
   </div>
 

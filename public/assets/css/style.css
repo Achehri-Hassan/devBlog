@@ -1,4 +1,5 @@
 @import url(rout.css);
+@import url(footer.css);
 
 *,
 *::before,
@@ -372,9 +373,7 @@ a {
   border: 1px solid #e4e4e4;
   border-radius: 14px;
   overflow: hidden;
-  transition:
-    border-color 0.2s,
-    transform 0.2s;
+  transition: 0.4s ease;
 }
 
 .card:hover {
