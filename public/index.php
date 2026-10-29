@@ -24,6 +24,7 @@ $articleRead = $callArticle->ReadAll();
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/article.css">
   <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
 </head>
 
 <body>
@@ -108,7 +109,7 @@ $articleRead = $callArticle->ReadAll();
 
 
    
-
+<script src="assets/js/animations.js" defer></script>
 </body>
 
 </html>
