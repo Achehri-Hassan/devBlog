@@ -13,24 +13,23 @@ class Comments
         $this->conn = $db->Connection();
     }
 
-    public function CreatComments(string $user_name, string $content, int $article_id, ?string $image = null): bool
+    public function CreatComments(string $user_name, string $content, int $article_id, ): bool
     {
-        $sql = "INSERT INTO comments (user_name, content, article_id, created_at, image)
-                VALUES (:user_name, :content, :article_id, NOW(), :image)";
+        $sql = "INSERT INTO comments (user_name, content, article_id, created_at)
+                VALUES (:user_name, :content, :article_id, NOW())";
 
         $stmt = $this->conn->prepare($sql);
 
         return $stmt->execute([
             ':user_name' => $user_name,
             ':content' => $content,
-            ':article_id' => $article_id,
-            ':image' => $image,
+            ':article_id' => $article_id
         ]);
     }
 
     public function ReadByArticleId(int $article_id): array
     {
-        $sql = "SELECT user_name, content, article_id, created_at, image
+        $sql = "SELECT user_name, content, article_id, created_at
                 FROM comments
                 WHERE article_id = :article_id
                 ORDER BY created_at DESC";

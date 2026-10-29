@@ -7,7 +7,6 @@ $articleRead = $callArticle->ReadAll();
 
 
 
-
 ?>
 
 
@@ -71,22 +70,32 @@ $articleRead = $callArticle->ReadAll();
       <div class="articles__grid">
         <?php foreach ($articleRead as $re): ?>
           <article class="card">
-            <a href="article.php?id_article=<?= $re['id_article'] ?>" class="card__media" tabindex="-1" aria-hidden="true">
+            <div class="card__media">
               <img src="assets/images/articles/<?= htmlspecialchars($re["image"]) ?>" alt="" loading="lazy">
-            </a>
-            <div class="card__body">
               <span class="card__category"><?= htmlspecialchars($re["category"]) ?></span>
-              <h3 class="card__title"><a href="#"><?= htmlspecialchars($re["description"]) ?></a></h3>
-              <time class="card__date" datetime="2025-05-19"><?= date("d m ", strtotime($re["created_at"])) ?></time>
-              <a href="article.php?id_article=<?= $re['id_article'] ?>" class="card__link">
-                Read More
-              </a>
+            </div>
+
+            <div class="card__body">
+              <time class="card__date" datetime="<?= date('Y-m-d', strtotime($re['created_at'])) ?>">
+                <?= date("d M Y", strtotime($re["created_at"])) ?>
+              </time>
+
+              <h3 class="card__title">
+                <a href="article.php?id_article=<?= (int) $re['id_article'] ?>">
+                  <?= htmlspecialchars($re["description"]) ?>
+                </a>
+              </h3>
+
+              <div class="card__foot">
+                <span>Read more</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </div>
             </div>
           </article>
         <?php endforeach; ?>
-
-
-
       </div>
     </div>
   </section>
