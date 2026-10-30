@@ -62,7 +62,7 @@ $comments = $ReadById ? $callComment->ReadByArticleId((int) $id_article) : [];
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/article.css">
   <link rel="stylesheet" href="assets/css/header.css">
-  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/Animations.css">
 </head>
 
 <body class="article-page">
