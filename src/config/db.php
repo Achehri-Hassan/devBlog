@@ -1,22 +1,21 @@
-
 <?php
 
 class Database
 {
-    private $localhost = "localhost";
-    private $dbname = "devBlog";
-    private $user = "root";
-    private $password = "";
-
     private $conn;
 
     public function Connection()
     {
         try {
+            $host = getenv("DB_HOST") ?: "localhost";
+            $dbname = getenv("DB_NAME") ?: "devBlog";
+            $user = getenv("DB_USER") ?: "root";
+            $password = getenv("DB_PASSWORD") ?: "";
+
             $this->conn = new PDO(
-                "mysql:host={$this->localhost};dbname={$this->dbname};charset=utf8mb4",
-                $this->user,
-                $this->password
+                "mysql:host={$host};dbname={$dbname};charset=utf8mb4",
+                $user,
+                $password
             );
 
             $this->conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION

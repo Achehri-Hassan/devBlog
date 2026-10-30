@@ -1,8 +1,8 @@
 <?php
 
+session_start();
 require_once __DIR__ . "/../../src/models/Post.php";
 
-session_start();
 if (!isset($_SESSION["is_admin"])) {
   header("Location: ../login.php");
   exit;

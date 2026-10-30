@@ -43,10 +43,15 @@ CREATE TABLE comments (
 );
 
 
+INSERT INTO users (username, email, password) VALUES (
+    'admin',
+    'Hassanadmin@gmail.com',
+    '$2b$12$JF5C8FCg/8A900PaEirbQOHISV/zDPAJh2nieEUlSU4pCBqnIcb3G'
+);
+
 INSERT INTO articles
 (title, description, content, image, admin_id, category)
 VALUES
-
 (
     'The Future of Artificial Intelligence',
     'Artificial Intelligence is changing the way we live and work. From smart assistants to advanced automation, AI is helping people solve problems and improve productivity.',
@@ -187,13 +192,3 @@ VALUES
     1,
     'Web Design'
 );
-
-
-
-
-INSERT INTO users ( username , email, password ) VALUES (
-  
-   "admin",
-  'Hassanadmin@gmail.com',
-  '$2b$12$JF5C8FCg/8A900PaEirbQOHISV/zDPAJh2nieEUlSU4pCBqnIcb3G'
-)

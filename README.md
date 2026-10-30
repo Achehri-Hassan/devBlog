@@ -4,6 +4,24 @@ DevBlog is a dynamic blog application and REST API built completely from scratch
 
 The project features a full public browsing interface, a secure administrator dashboard, and a complete REST API for article management.
 
+## Run with Docker
+
+Start the application and its MySQL database from the project root:
+
+```sh
+docker compose up --build
+```
+
+Open [http://localhost:8080](http://localhost:8080). The article API is available
+under `/api/articles/`. Docker initializes MySQL with `database/schema.sql` on
+the first start; uploaded article images and database data are kept in named
+volumes.
+
+To use a different host port, set `APP_PORT` (for example,
+`APP_PORT=9000 docker compose up --build`). Stop the services with
+`docker compose down`; to also delete the persisted database and uploaded
+images, use `docker compose down --volumes`.
+
 ## Features
 
 - **Public Pages**: Browse home, view all articles, read specific article details, and interact with user layouts.
